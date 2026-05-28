@@ -1,0 +1,134 @@
+services:
+
+  leaf-a-1:
+    build: .
+    environment:
+      - NODE_NAME=leaf-a-1
+      - NODE_TYPE=leaf
+      - PEERS=leaf-a-2,leaf-a-3
+      - UPSTREAM_URLS=http://regional-1:9000,http://regional-2:9000,http://regional-3:9000
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./data:/app/data
+
+  leaf-a-2:
+    build: .
+    environment:
+      - NODE_NAME=leaf-a-2
+      - NODE_TYPE=leaf
+      - PEERS=leaf-a-1,leaf-a-3
+      - UPSTREAM_URLS=http://regional-1:9000,http://regional-2:9000,http://regional-3:9000
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./data:/app/data
+
+  leaf-a-3:
+    build: .
+    environment:
+      - NODE_NAME=leaf-a-3
+      - NODE_TYPE=leaf
+      - PEERS=leaf-a-1,leaf-a-2
+      - UPSTREAM_URLS=http://regional-1:9000,http://regional-2:9000,http://regional-3:9000
+    ports:
+      - "8083:8080"
+    volumes:
+      - ./data:/app/data
+
+  leaf-b-1:
+    build: .
+    environment:
+      - NODE_NAME=leaf-b-1
+      - NODE_TYPE=leaf
+      - PEERS=leaf-b-2,leaf-b-3
+      - UPSTREAM_URLS=http://regional-1:9000,http://regional-2:9000,http://regional-3:9000
+    ports:
+      - "8091:8080"
+    volumes:
+      - ./data:/app/data
+
+  leaf-b-2:
+    build: .
+    environment:
+      - NODE_NAME=leaf-b-2
+      - NODE_TYPE=leaf
+      - PEERS=leaf-b-1,leaf-b-3
+      - UPSTREAM_URLS=http://regional-1:9000,http://regional-2:9000,http://regional-3:9000
+    ports:
+      - "8092:8080"
+    volumes:
+      - ./data:/app/data
+
+  leaf-b-3:
+    build: .
+    environment:
+      - NODE_NAME=leaf-b-3
+      - NODE_TYPE=leaf
+      - PEERS=leaf-b-1,leaf-b-2
+      - UPSTREAM_URLS=http://regional-1:9000,http://regional-2:9000,http://regional-3:9000
+    ports:
+      - "8093:8080"
+    volumes:
+      - ./data:/app/data
+
+  regional-1:
+    build: .
+    environment:
+      - NODE_NAME=regional-1
+      - NODE_TYPE=regional
+      - PEERS=regional-2,regional-3
+      - UPSTREAM_URLS=http://cloud-1:9000,http://cloud-2:9000,http://cloud-3:9000
+    volumes:
+      - ./data:/app/data
+
+  regional-2:
+    build: .
+    environment:
+      - NODE_NAME=regional-2
+      - NODE_TYPE=regional
+      - PEERS=regional-1,regional-3
+      - UPSTREAM_URLS=http://cloud-1:9000,http://cloud-2:9000,http://cloud-3:9000
+    volumes:
+      - ./data:/app/data
+
+  regional-3:
+    build: .
+    environment:
+      - NODE_NAME=regional-3
+      - NODE_TYPE=regional
+      - PEERS=regional-1,regional-2
+      - UPSTREAM_URLS=http://cloud-1:9000,http://cloud-2:9000,http://cloud-3:9000
+    volumes:
+      - ./data:/app/data
+
+  cloud-1:
+    build: .
+    environment:
+      - NODE_NAME=cloud-1
+      - NODE_TYPE=cloud
+      - PEERS=cloud-2,cloud-3
+    volumes:
+      - ./data:/app/data
+
+  cloud-2:
+    build: .
+    environment:
+      - NODE_NAME=cloud-2
+      - NODE_TYPE=cloud
+      - PEERS=cloud-1,cloud-3
+    ports:
+      - "9082:8080"
+    volumes:
+      - ./data:/app/data
+
+  cloud-3:
+    build: .
+    environment:
+      - NODE_NAME=cloud-3
+      - NODE_TYPE=cloud
+      - PEERS=cloud-1,cloud-2
+    ports:
+      - "9083:8080"
+    volumes:
+      - ./data:/app/data
